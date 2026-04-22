@@ -7,19 +7,24 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import schwarz.jobs.interview.coupon.core.domain.Coupon;
+import schwarz.jobs.interview.coupon.common.mapper.CouponMapper;
+import schwarz.jobs.interview.coupon.core.domain.CouponEntity;
 import schwarz.jobs.interview.coupon.core.repository.CouponRepository;
 import schwarz.jobs.interview.coupon.core.services.model.Basket;
-import schwarz.jobs.interview.coupon.web.dto.CouponDTO;
+import schwarz.jobs.interview.coupon.core.services.model.Coupon;
 import schwarz.jobs.interview.coupon.web.dto.CouponRequestDTO;
 
 @Service
 @RequiredArgsConstructor
 public class CouponService {
 
+    // Repositories
     private final CouponRepository couponRepository;
 
-    public Optional<Coupon> getCoupon(final String code) {
+    // Mappers
+    private final CouponMapper couponMapper;
+
+    public Optional<CouponEntity> getCoupon(final String code) {
         return couponRepository.findByCode(code);
     }
 
@@ -46,28 +51,14 @@ public class CouponService {
         });
     }
 
-    public Coupon createCoupon(final CouponDTO couponDTO) {
-
-        Coupon coupon = null;
-
-        try {
-            coupon = Coupon.builder()
-                .code(couponDTO.getCode().toLowerCase())
-                .discount(couponDTO.getDiscount())
-                .minBasketValue(couponDTO.getMinBasketValue())
-                .build();
-
-        } catch (final NullPointerException e) {
-
-            // Don't coupon when code is null
-        }
-
-        return couponRepository.save(coupon);
+    public Coupon createCoupon(final Coupon coupon) {
+        final CouponEntity couponEntity = couponRepository.save(couponMapper.toCouponEntity(coupon));
+        return couponMapper.toCoupon(couponEntity);
     }
 
-    public List<Coupon> getCoupons(final CouponRequestDTO couponRequestDTO) {
+    public List<CouponEntity> getCoupons(final CouponRequestDTO couponRequestDTO) {
 
-        final ArrayList<Coupon> foundCoupons = new ArrayList<>();
+        final ArrayList<CouponEntity> foundCoupons = new ArrayList<>();
 
         couponRequestDTO.getCodes().forEach(code -> foundCoupons.add(couponRepository.findByCode(code).get()));
 

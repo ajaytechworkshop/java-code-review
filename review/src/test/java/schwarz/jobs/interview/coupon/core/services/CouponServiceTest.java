@@ -11,21 +11,24 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
+import java.util.Random;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import schwarz.jobs.interview.coupon.core.domain.Coupon;
+import schwarz.jobs.interview.coupon.common.mapper.CouponMapper;
+import schwarz.jobs.interview.coupon.core.domain.CouponEntity;
 import schwarz.jobs.interview.coupon.core.repository.CouponRepository;
 import schwarz.jobs.interview.coupon.core.services.model.Basket;
-import schwarz.jobs.interview.coupon.web.dto.CouponDTO;
+import schwarz.jobs.interview.coupon.core.services.model.Coupon;
 import schwarz.jobs.interview.coupon.web.dto.CouponRequestDTO;
 
 @ExtendWith(SpringExtension.class)
 public class CouponServiceTest {
+
+    private final CouponMapper couponMapper = Mappers.getMapper(CouponMapper.class);
 
     @InjectMocks
     private CouponService couponService;
@@ -35,13 +38,13 @@ public class CouponServiceTest {
 
     @Test
     public void createCoupon() {
-        CouponDTO dto = CouponDTO.builder()
+        Coupon coupon = Coupon.builder()
             .code("12345")
             .discount(BigDecimal.TEN)
             .minBasketValue(BigDecimal.valueOf(50))
             .build();
 
-        couponService.createCoupon(dto);
+        couponService.createCoupon(coupon);
 
         verify(couponRepository, times(1)).save(any());
     }
@@ -53,11 +56,9 @@ public class CouponServiceTest {
             .value(BigDecimal.valueOf(100))
             .build();
 
-        when(couponRepository.findByCode("1111")).thenReturn(Optional.of(Coupon.builder()
-            .code("1111")
-            .discount(BigDecimal.TEN)
-            .minBasketValue(BigDecimal.valueOf(50))
-            .build()));
+        final CouponEntity couponEntity = new CouponEntity(new Random().nextLong(), "1111", BigDecimal.TEN, BigDecimal.valueOf(50));
+
+        when(couponRepository.findByCode("1111")).thenReturn(Optional.of(couponEntity));
 
         Optional<Basket> optionalBasket = couponService.apply(firstBasket, "1111");
 
@@ -94,19 +95,13 @@ public class CouponServiceTest {
             .codes(Arrays.asList("1111", "1234"))
             .build();
 
+        final CouponEntity couponEntity01 = new CouponEntity(new Random().nextLong(), "1111", BigDecimal.TEN, BigDecimal.valueOf(50));
+        final CouponEntity couponEntity02 = new CouponEntity(new Random().nextLong(), "1234", BigDecimal.TEN, BigDecimal.valueOf(50));
         when(couponRepository.findByCode(any()))
-            .thenReturn(Optional.of(Coupon.builder()
-                .code("1111")
-                .discount(BigDecimal.TEN)
-                .minBasketValue(BigDecimal.valueOf(50))
-                .build()))
-            .thenReturn(Optional.of(Coupon.builder()
-                .code("1234")
-                .discount(BigDecimal.TEN)
-                .minBasketValue(BigDecimal.valueOf(50))
-                .build()));
+            .thenReturn(Optional.of(couponEntity01))
+            .thenReturn(Optional.of(couponEntity02));
 
-        List<Coupon> returnedCoupons = couponService.getCoupons(dto);
+        List<CouponEntity> returnedCoupons = couponService.getCoupons(dto);
 
         assertThat(returnedCoupons.get(0).getCode()).isEqualTo("1111");
 
