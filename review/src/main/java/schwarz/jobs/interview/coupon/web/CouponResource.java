@@ -12,13 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import schwarz.jobs.interview.coupon.common.mapper.BasketMapper;
 import schwarz.jobs.interview.coupon.common.mapper.CouponMapper;
 import schwarz.jobs.interview.coupon.core.domain.CouponEntity;
 import schwarz.jobs.interview.coupon.core.services.CouponService;
-import schwarz.jobs.interview.coupon.core.services.model.Basket;
-import schwarz.jobs.interview.coupon.web.dto.ApplicationRequestDTO;
-import schwarz.jobs.interview.coupon.web.dto.BasketDTO;
 import schwarz.jobs.interview.coupon.web.dto.CouponDTO;
 import schwarz.jobs.interview.coupon.web.dto.CouponRequestDTO;
 
@@ -32,39 +28,7 @@ public class CouponResource {
     private final CouponService couponService;
 
     // Mappers
-    private final BasketMapper basketMapper;
     private final CouponMapper couponMapper;
-
-    /**
-     * @param applicationRequestDTO
-     * @return
-     */
-    //@ApiOperation(value = "Applies currently active promotions and coupons from the request to the requested Basket - Version 1")
-    @PostMapping(value = "/apply")
-    public ResponseEntity<BasketDTO> apply(
-        //@ApiParam(value = "Provides the necessary basket and customer information required for the coupon application", required = true)
-        @RequestBody @Valid final ApplicationRequestDTO applicationRequestDTO) {
-
-        log.info("Applying coupon with code : {}", applicationRequestDTO.getCode());
-
-        final Basket requestedBasket = basketMapper.toBasket(applicationRequestDTO.getBasket());
-
-        final BasketDTO basketDTO = couponService.apply(requestedBasket, applicationRequestDTO.getCode())
-                .map(basketMapper::toBasketDTO)
-                .orElse(null);
-
-        if (null == basketDTO) {
-            return ResponseEntity.notFound().build();
-        }
-
-        if (!basketDTO.isApplicationSuccessful()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
-
-        log.info("Applied coupon");
-
-        return ResponseEntity.ok().body(basketDTO);
-    }
 
     @PostMapping("/create")
     public ResponseEntity<Long> create(@RequestBody @Valid final CouponDTO couponDTO) {

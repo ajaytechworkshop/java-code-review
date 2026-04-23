@@ -14,11 +14,9 @@ import java.util.Optional;
 import java.util.Random;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import schwarz.jobs.interview.coupon.common.mapper.CouponMapper;
 import schwarz.jobs.interview.coupon.core.domain.CouponEntity;
 import schwarz.jobs.interview.coupon.core.repository.CouponRepository;
 import schwarz.jobs.interview.coupon.core.services.model.Basket;
@@ -28,10 +26,9 @@ import schwarz.jobs.interview.coupon.web.dto.CouponRequestDTO;
 @ExtendWith(SpringExtension.class)
 public class CouponServiceTest {
 
-    private final CouponMapper couponMapper = Mappers.getMapper(CouponMapper.class);
-
     @InjectMocks
     private CouponService couponService;
+    private BasketService basketService;
 
     @Mock
     private CouponRepository couponRepository;
@@ -60,7 +57,7 @@ public class CouponServiceTest {
 
         when(couponRepository.findByCode("1111")).thenReturn(Optional.of(couponEntity));
 
-        Optional<Basket> optionalBasket = couponService.apply(firstBasket, "1111");
+        Optional<Basket> optionalBasket = basketService.apply(firstBasket, "1111");
 
         assertThat(optionalBasket).hasValueSatisfying(b -> {
             assertThat(b.getAppliedDiscount()).isEqualTo(BigDecimal.TEN);
@@ -71,7 +68,7 @@ public class CouponServiceTest {
             .value(BigDecimal.valueOf(0))
             .build();
 
-        optionalBasket = couponService.apply(secondBasket, "1111");
+        optionalBasket = basketService.apply(secondBasket, "1111");
 
         assertThat(optionalBasket).hasValueSatisfying(b -> {
             assertThat(b).isEqualTo(secondBasket);
@@ -83,7 +80,7 @@ public class CouponServiceTest {
             .build();
 
         assertThatThrownBy(() -> {
-            couponService.apply(thirdBasket, "1111");
+            basketService.apply(thirdBasket, "1111");
         }).isInstanceOf(RuntimeException.class)
             .hasMessage("Can't apply negative discounts");
     }
