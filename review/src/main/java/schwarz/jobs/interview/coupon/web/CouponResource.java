@@ -32,7 +32,7 @@ public class CouponResource {
 
     @PostMapping("/create")
     public ResponseEntity<Long> create(@RequestBody @Valid final CouponDTO couponDTO) {
-        log.info("CREATING COUPON : {}", couponDTO.getCode());
+        log.info("CREATE COUPON WITH COUPON_CODE : {}", couponDTO.getCode());
 
         final Long couponId = couponService.createCoupon(couponMapper.toCoupon(couponDTO)).getId();
 
