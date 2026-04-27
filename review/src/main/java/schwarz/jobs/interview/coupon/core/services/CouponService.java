@@ -10,7 +10,7 @@ public interface CouponService {
 
     Optional<CouponEntity> getCoupon(final String code);
 
-    Coupon createCoupon(final Coupon coupon);
+    Long createCoupon(final Coupon coupon);
 
     List<CouponEntity> getCoupons(final CouponRequestDTO couponRequestDTO);
 }

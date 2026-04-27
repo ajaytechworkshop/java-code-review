@@ -28,9 +28,9 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public Coupon createCoupon(final Coupon coupon) {
-        final CouponEntity couponEntity = couponRepository.save(couponMapper.toCouponEntity(coupon));
-        return couponMapper.toCoupon(couponEntity);
+    public Long createCoupon(final Coupon coupon) {
+        return couponRepository.save(couponMapper.toCouponEntity(coupon))
+                               .getId();
     }
 
     @Override

@@ -6,7 +6,6 @@ import static schwarz.jobs.interview.coupon.common.util.MessageKey.COUPON_CREATE
 import static schwarz.jobs.interview.coupon.common.util.MessageKey.COUPON_CREATE_FAILED;
 import static schwarz.jobs.interview.coupon.common.util.MessageKey.COU_VAL_ERR_001;
 import static schwarz.jobs.interview.coupon.common.util.MessageKey.COU_VAL_ERR_002;
-import static schwarz.jobs.interview.coupon.common.util.MessageKey.COU_VAL_ERR_005;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -16,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.client.EntityExchangeResult;
 import schwarz.jobs.interview.coupon.web.dto.ApplicationResponseDto;
-import schwarz.jobs.interview.coupon.web.dto.CouponDTO;
+import schwarz.jobs.interview.coupon.web.dto.CreateCouponDTO;
 
 public class CouponResourceTest extends AbstractWebTest {
 
@@ -24,13 +23,15 @@ public class CouponResourceTest extends AbstractWebTest {
     @DisplayName("Create Coupon Successfully")
     void validate_create_coupon_successfully() {
         // given
-        final CouponDTO couponDTO = CouponDTO.builder()
-            .code("cou_code")
-            .discount(new BigDecimal(50.0))
-            .minBasketValue(new BigDecimal("15.0")).build();
+        final CreateCouponDTO createCouponDTO = CreateCouponDTO.builder()
+                                                               .code("cou_code")
+                                                               .discount(new BigDecimal(50.0))
+                                                               .minBasketValue(new BigDecimal("15.0"))
+                                                               .build();
 
         // when
-        final EntityExchangeResult<ApplicationResponseDto> exchange = createCoupon(couponDTO).returnResult(ApplicationResponseDto.class);
+        final EntityExchangeResult<ApplicationResponseDto> exchange = createCoupon(createCouponDTO)
+            .returnResult(ApplicationResponseDto.class);
 
         // then
         assertThat(exchange.getStatus()).isEqualTo(CREATED);
@@ -41,12 +42,13 @@ public class CouponResourceTest extends AbstractWebTest {
     @DisplayName("Create Coupon unsuccessfully, when coupon code is missing")
     void validate_create_coupon_unsuccessfully_when_coupon_code_is_missing() {
         // given
-        final CouponDTO couponDTO = CouponDTO.builder()
-                                             .discount(new BigDecimal(50.0))
-                                             .minBasketValue(new BigDecimal("15.0")).build();
+        final CreateCouponDTO createCouponDTO = CreateCouponDTO.builder()
+                                                   .discount(new BigDecimal(50.0))
+                                                   .minBasketValue(new BigDecimal("15.0")).build();
 
         // when
-        final EntityExchangeResult<ApplicationResponseDto> exchange = createCoupon(couponDTO).returnResult(ApplicationResponseDto.class);
+        final EntityExchangeResult<ApplicationResponseDto> exchange =
+            createCoupon(createCouponDTO).returnResult(ApplicationResponseDto.class);
 
         // then
         assertThat(exchange.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
@@ -54,21 +56,20 @@ public class CouponResourceTest extends AbstractWebTest {
     }
 
     @Test
-    @DisplayName("Create Coupon unsuccessfully, when coupon discount is missing and minimum basket value is invalid")
-    void validate_create_coupon_unsuccessfully_when_coupon_discount_is_missing_and_minimum_basket_value_is_invalid() {
+    @DisplayName("Create Coupon unsuccessfully, when coupon discount is missing and minimum basket value is missing")
+    void validate_create_coupon_unsuccessfully_when_coupon_discount_is_missing_and_minimum_basket_value_is_missing() {
         // given
-        final CouponDTO couponDTO = CouponDTO.builder()
-                                             .code("any-code")
-                                             .minBasketValue(new BigDecimal("-15.0")).build();
+        final CreateCouponDTO createCouponDTO = CreateCouponDTO.builder().code("any-code").build();
 
         // when
-        final EntityExchangeResult<ApplicationResponseDto> exchange = createCoupon(couponDTO).returnResult(ApplicationResponseDto.class);
+        final EntityExchangeResult<ApplicationResponseDto> exchange =
+            createCoupon(createCouponDTO).returnResult(ApplicationResponseDto.class);
 
         // then
         assertThat(exchange.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
 
         assertResponse(exchange.getResponseBody(),
             COUPON_CREATE_FAILED,
-            List.of(error("discount", COU_VAL_ERR_002), error("minBasketValue", COU_VAL_ERR_005)));
+            List.of(error("discount", COU_VAL_ERR_002), error("code", COU_VAL_ERR_001)));
     }
 }

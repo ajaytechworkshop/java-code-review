@@ -7,15 +7,16 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.client.RestTestClient;
 import schwarz.jobs.interview.coupon.CouponApplicationTests;
 import schwarz.jobs.interview.coupon.common.util.MessageKey;
+import schwarz.jobs.interview.coupon.common.util.Paths;
 import schwarz.jobs.interview.coupon.web.dto.ApplicationResponseDto;
-import schwarz.jobs.interview.coupon.web.dto.CouponDTO;
+import schwarz.jobs.interview.coupon.web.dto.CreateCouponDTO;
 
 public class AbstractWebTest extends CouponApplicationTests {
 
-    protected RestTestClient.ResponseSpec createCoupon(final CouponDTO couponDTO) {
+    protected RestTestClient.ResponseSpec createCoupon(final CreateCouponDTO createCouponDTO) {
         return restTestClient.post()
-                             .uri("/api/coupon/create")
-                             .body(couponDTO)
+                             .uri(Paths.COUPON_CREATE)
+                             .body(createCouponDTO)
                              .accept(MediaType.APPLICATION_JSON)
                              .exchange();
     }
