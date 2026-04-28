@@ -10,7 +10,7 @@ public enum MessageKey {
     APP_ERR_001("app.error.001"),
     APP_ERR_002("app.err.002"),
 
-    // Validation errors create/update coupon
+    // Validation errors for Coupon
     COU_CU_ERR_001("coupon.code.required"),
     COU_CU_ERR_002("coupon.discount.required"),
     COU_CU_ERR_003("coupon.discount.invalid"),
@@ -18,7 +18,11 @@ public enum MessageKey {
     COU_CU_ERR_005("coupon.minimumbasket.invalid"),
 
     // Validation errors filter coupon
-    COU_FIL_ERR_001("coupon.filter.codes.required");
+    COU_FIL_ERR_001("coupon.filter.codes.required"),
+
+    // Validation errors, Basket
+    BAS_VAL_ERR_001("basket.required"),
+    BAS_VAL_ERR_002("basket.value.invalid");
 
     private final String key;
 

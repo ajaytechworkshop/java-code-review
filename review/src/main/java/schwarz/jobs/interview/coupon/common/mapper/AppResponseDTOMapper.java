@@ -7,10 +7,10 @@ import org.mapstruct.ReportingPolicy;
 import org.springframework.beans.factory.annotation.Autowired;
 import schwarz.jobs.interview.coupon.common.service.MessageService;
 import schwarz.jobs.interview.coupon.common.util.MessageKey;
-import schwarz.jobs.interview.coupon.web.dto.ApplicationResponseDto;
+import schwarz.jobs.interview.coupon.web.dto.AppResponseDto;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
-public abstract class ApplicationResponseDTOMapper {
+public abstract class AppResponseDTOMapper {
 
     @Autowired
     protected MessageService messageService;
@@ -18,12 +18,12 @@ public abstract class ApplicationResponseDTOMapper {
     @Mapping(target = "message", expression = "java(messageService.message(messageKey.key()))")
     @Mapping(target = "code", expression = "java(messageKey.name())")
     @Mapping(target = "errors", ignore = true)
-    public abstract ApplicationResponseDto<Object> mapSuccess(final MessageKey messageKey, final Object data);
+    public abstract AppResponseDto<Object> mapSuccess(final MessageKey messageKey, final Object data);
 
     @Mapping(target = "message", expression = "java(messageService.message(messageKey.key()))")
     @Mapping(target = "code", expression = "java(messageKey.name())")
     @Mapping(target = "data", ignore = true)
-    public abstract ApplicationResponseDto<Void> mapError(final MessageKey messageKey, final List<ApplicationResponseDto.Error> errors);
+    public abstract AppResponseDto<Void> mapError(final MessageKey messageKey, final List<AppResponseDto.Error> errors);
 
-    public abstract ApplicationResponseDto.Error mapViolation(final String field, final String message);
+    public abstract AppResponseDto.Error mapViolation(final String field, final String message);
 }

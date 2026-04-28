@@ -5,13 +5,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.List;
 import schwarz.jobs.interview.coupon.CouponApplicationTests;
 import schwarz.jobs.interview.coupon.common.util.MessageKey;
-import schwarz.jobs.interview.coupon.web.dto.ApplicationResponseDto;
+import schwarz.jobs.interview.coupon.web.dto.AppResponseDto;
 
 public class AbstractWebTest extends CouponApplicationTests {
 
-    protected void assertResponse(final ApplicationResponseDto actual,
+    protected void assertResponse(final AppResponseDto actual,
                                   final MessageKey expectedMessage,
-                                  final List<ApplicationResponseDto.Error> errors) {
+                                  final List<AppResponseDto.Error> errors) {
 
         assertThat(actual.message()).isEqualTo(messageService.message(expectedMessage.key()));
         assertThat(actual.code()).isEqualTo(expectedMessage.name());
@@ -21,10 +21,10 @@ public class AbstractWebTest extends CouponApplicationTests {
         }
     }
 
-    protected ApplicationResponseDto.Error error(final String field, final MessageKey messageKey) {
-        return ApplicationResponseDto.Error.builder()
-                                           .field(field)
-                                           .message(messageService.message(messageKey.key()))
-                                           .build();
+    protected AppResponseDto.Error error(final String field, final MessageKey messageKey) {
+        return AppResponseDto.Error.builder()
+            .field(field)
+            .message(messageService.message(messageKey.key()))
+            .build();
     }
 }

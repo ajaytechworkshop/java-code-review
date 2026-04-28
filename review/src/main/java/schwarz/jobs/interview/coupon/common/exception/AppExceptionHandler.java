@@ -13,8 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import schwarz.jobs.interview.coupon.common.mapper.ApplicationResponseDTOMapper;
-import schwarz.jobs.interview.coupon.web.dto.ApplicationResponseDto;
+import schwarz.jobs.interview.coupon.common.mapper.AppResponseDTOMapper;
+import schwarz.jobs.interview.coupon.web.dto.AppResponseDto;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -22,12 +22,12 @@ import schwarz.jobs.interview.coupon.web.dto.ApplicationResponseDto;
 public class AppExceptionHandler {
 
     // Mappers
-    private final ApplicationResponseDTOMapper responseDTOMapper;
+    private final AppResponseDTOMapper responseDTOMapper;
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApplicationResponseDto<Void>> handleMethodArgumentNotValidException(final MethodArgumentNotValidException violations) {
+    public ResponseEntity<AppResponseDto<Void>> handleMethodArgumentNotValidException(final MethodArgumentNotValidException violations) {
 
-        final List<ApplicationResponseDto.Error> validationErrors = violations.getBindingResult()
+        final List<AppResponseDto.Error> validationErrors = violations.getBindingResult()
             .getFieldErrors()
             .stream()
             .map(error -> responseDTOMapper.mapViolation(error.getField(), error.getDefaultMessage()))
@@ -36,14 +36,14 @@ public class AppExceptionHandler {
         log.info("Validation Failed, Violations :{}", validationErrors);
 
         return ResponseEntity.status(BAD_REQUEST)
-                             .body(responseDTOMapper.mapError(APP_ERR_002, validationErrors));
+            .body(responseDTOMapper.mapError(APP_ERR_002, validationErrors));
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApplicationResponseDto<Void>> handleException(final Exception ex) {
+    public ResponseEntity<AppResponseDto<Void>> handleException(final Exception ex) {
         log.error("Exception While processing request", ex);
         return ResponseEntity.status(INTERNAL_SERVER_ERROR)
-                             .body(responseDTOMapper.mapError(APP_ERR_001, Collections.emptyList()));
+            .body(responseDTOMapper.mapError(APP_ERR_001, Collections.emptyList()));
     }
 
 }

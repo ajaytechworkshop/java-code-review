@@ -14,7 +14,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.client.EntityExchangeResult;
-import schwarz.jobs.interview.coupon.web.dto.ApplicationResponseDto;
+import schwarz.jobs.interview.coupon.web.dto.AppResponseDto;
 import schwarz.jobs.interview.coupon.web.dto.CreateCouponDTO;
 
 public class CreateCouponTest extends AbstractWebTest {
@@ -30,8 +30,8 @@ public class CreateCouponTest extends AbstractWebTest {
                                                                .build();
 
         // when
-        final EntityExchangeResult<ApplicationResponseDto> exchange = createCoupon(createCouponDTO)
-            .returnResult(ApplicationResponseDto.class);
+        final EntityExchangeResult<AppResponseDto> exchange = createCoupon(createCouponDTO)
+            .returnResult(AppResponseDto.class);
 
         // then
         assertThat(exchange.getStatus()).isEqualTo(CREATED);
@@ -47,8 +47,8 @@ public class CreateCouponTest extends AbstractWebTest {
                                                    .minBasketValue(BigDecimal.valueOf(15.0)).build();
 
         // when
-        final EntityExchangeResult<ApplicationResponseDto> exchange =
-            createCoupon(createCouponDTO).returnResult(ApplicationResponseDto.class);
+        final EntityExchangeResult<AppResponseDto> exchange =
+            createCoupon(createCouponDTO).returnResult(AppResponseDto.class);
 
         // then
         assertThat(exchange.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
@@ -62,8 +62,8 @@ public class CreateCouponTest extends AbstractWebTest {
         final CreateCouponDTO createCouponDTO = CreateCouponDTO.builder().code("any-code").build();
 
         // when
-        final EntityExchangeResult<ApplicationResponseDto> exchange =
-            createCoupon(createCouponDTO).returnResult(ApplicationResponseDto.class);
+        final EntityExchangeResult<AppResponseDto> exchange =
+            createCoupon(createCouponDTO).returnResult(AppResponseDto.class);
 
         // then
         assertThat(exchange.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);

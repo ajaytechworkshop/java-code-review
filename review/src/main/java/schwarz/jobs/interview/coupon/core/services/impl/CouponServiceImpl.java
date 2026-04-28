@@ -21,7 +21,7 @@ public class CouponServiceImpl implements CouponService {
     private final CouponMapper couponMapper;
 
     @Override
-    public Optional<Coupon> getCoupon(final String code) {
+    public Optional<Coupon> getCouponByCode(final String code) {
         return couponRepository.findByCode(code)
             .map(couponMapper::toCoupon);
     }

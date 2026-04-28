@@ -34,8 +34,8 @@ public class FilterCouponTest extends AbstractWebTest {
         couponService.createCoupon(newCoupon01);
         couponService.createCoupon(newCoupon02);
 
-        final Coupon coupon01 = couponService.getCoupon(newCoupon01.getCode()).orElseThrow();
-        final Coupon coupon02 = couponService.getCoupon(newCoupon02.getCode()).orElseThrow();
+        final Coupon coupon01 = couponService.getCouponByCode(newCoupon01.getCode()).orElseThrow();
+        final Coupon coupon02 = couponService.getCouponByCode(newCoupon02.getCode()).orElseThrow();
 
         // then
         assertEquals(

@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import schwarz.jobs.interview.coupon.common.mapper.ApplicationResponseDTOMapper;
+import schwarz.jobs.interview.coupon.common.mapper.AppResponseDTOMapper;
 import schwarz.jobs.interview.coupon.common.mapper.CouponMapper;
 import schwarz.jobs.interview.coupon.common.util.Paths;
 import schwarz.jobs.interview.coupon.core.services.CouponService;
-import schwarz.jobs.interview.coupon.web.dto.ApplicationResponseDto;
+import schwarz.jobs.interview.coupon.web.dto.AppResponseDto;
 import schwarz.jobs.interview.coupon.web.dto.CouponDTO;
 import schwarz.jobs.interview.coupon.web.dto.CouponFilterDTO;
 import schwarz.jobs.interview.coupon.web.dto.CreateCouponDTO;
@@ -32,10 +32,10 @@ public class CouponResource {
 
     // Mappers
     private final CouponMapper couponMapper;
-    private final ApplicationResponseDTOMapper responseDTOMapper;
+    private final AppResponseDTOMapper responseDTOMapper;
 
     @PostMapping(Paths.COUPON_CREATE)
-    public ResponseEntity<ApplicationResponseDto<Object>> create(@RequestBody @Valid final CreateCouponDTO couponDTO) {
+    public ResponseEntity<AppResponseDto<Object>> create(@RequestBody @Valid final CreateCouponDTO couponDTO) {
         log.info("CREATE COUPON WITH COUPON_CODE : {}", couponDTO.getCode());
 
         final Long couponId = couponService.createCoupon(couponMapper.toCoupon(couponDTO));

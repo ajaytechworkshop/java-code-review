@@ -8,7 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.test.web.servlet.client.RestTestClient;
 import schwarz.jobs.interview.coupon.common.util.Paths;
-import schwarz.jobs.interview.coupon.web.dto.ApplicationResponseDto;
+import schwarz.jobs.interview.coupon.web.dto.AppResponseDto;
 import schwarz.jobs.interview.coupon.web.dto.CouponDTO;
 import schwarz.jobs.interview.coupon.web.dto.CouponFilterDTO;
 import schwarz.jobs.interview.coupon.web.dto.CreateCouponDTO;
@@ -46,14 +46,14 @@ public class RequestHelper {
             .getResponseBody();
     }
 
-    public ApplicationResponseDto<Void> filterCouponsUnsuccessfully(final Set<String> codes) {
+    public AppResponseDto<Void> filterCouponsUnsuccessfully(final Set<String> codes) {
         final CouponFilterDTO couponFilterDTO = CouponFilterDTO.builder()
             .codes(codes)
             .build();
 
         return filterCoupons(couponFilterDTO)
             .expectStatus().isEqualTo(400)
-            .returnResult(ApplicationResponseDto.class)
+            .returnResult(AppResponseDto.class)
             .getResponseBody();
     }
 }

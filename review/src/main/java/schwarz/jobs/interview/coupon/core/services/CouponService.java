@@ -7,7 +7,7 @@ import schwarz.jobs.interview.coupon.core.services.model.CouponFilter;
 
 public interface CouponService {
 
-    Optional<Coupon> getCoupon(final String code);
+    Optional<Coupon> getCouponByCode(final String code);
 
     Long createCoupon(final Coupon coupon);
 
