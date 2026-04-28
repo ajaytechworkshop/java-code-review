@@ -12,7 +12,7 @@ import tools.jackson.databind.json.JsonMapper;
 public class JsonMapperConfig {
 
     @Bean
-    public JsonMapper objectMapper() {
+    public JsonMapper jsonMapper() {
         return JsonMapper.builder()
             .changeDefaultPropertyInclusion(inclusion -> inclusion.withValueInclusion(JsonInclude.Include.NON_NULL))
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)

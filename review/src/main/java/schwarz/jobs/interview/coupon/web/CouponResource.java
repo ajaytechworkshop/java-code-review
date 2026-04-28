@@ -9,7 +9,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,10 +16,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import schwarz.jobs.interview.coupon.common.mapper.ApplicationResponseDTOMapper;
 import schwarz.jobs.interview.coupon.common.mapper.CouponMapper;
 import schwarz.jobs.interview.coupon.common.util.Paths;
-import schwarz.jobs.interview.coupon.core.domain.CouponEntity;
 import schwarz.jobs.interview.coupon.core.services.CouponService;
 import schwarz.jobs.interview.coupon.web.dto.ApplicationResponseDto;
-import schwarz.jobs.interview.coupon.web.dto.CouponRequestDTO;
+import schwarz.jobs.interview.coupon.web.dto.CouponDTO;
+import schwarz.jobs.interview.coupon.web.dto.CouponFilterDTO;
 import schwarz.jobs.interview.coupon.web.dto.CreateCouponDTO;
 
 @RestController
@@ -43,16 +42,20 @@ public class CouponResource {
 
         log.info("COUPON CREATED SUCCESSFULLY: {}", couponId);
 
-        URI uri = ServletUriComponentsBuilder.fromUriString(Paths.COUPON_BASE)
-                                             .path("/{id}")
-                                             .buildAndExpand(couponId)
-                                             .toUri();
+        final URI uri = ServletUriComponentsBuilder.fromUriString(Paths.COUPON_BASE)
+            .path("/{id}")
+            .buildAndExpand(couponId)
+            .toUri();
 
         return ResponseEntity.created(uri).body(responseDTOMapper.mapSuccess(COUPON_CREATED, couponId));
     }
 
-    @GetMapping("/coupons")
-    public List<CouponEntity> getCoupons(@RequestBody @Valid final CouponRequestDTO couponRequestDTO) {
-        return couponService.getCoupons(couponRequestDTO);
+    @PostMapping(Paths.COUPON_FILTER)
+    public ResponseEntity<List<CouponDTO>> filterCoupons(@RequestBody @Valid final CouponFilterDTO couponFilterDTO) {
+        final List<CouponDTO> coupons = couponService.filterCoupons(couponMapper.toCouponFilter(couponFilterDTO))
+            .stream()
+            .map(couponMapper::toCouponDto)
+            .toList();
+        return ResponseEntity.ok(coupons);
     }
 }

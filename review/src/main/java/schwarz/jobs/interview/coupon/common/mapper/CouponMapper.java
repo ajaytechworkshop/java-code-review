@@ -3,7 +3,9 @@ package schwarz.jobs.interview.coupon.common.mapper;
 import org.mapstruct.Mapper;
 import schwarz.jobs.interview.coupon.core.domain.CouponEntity;
 import schwarz.jobs.interview.coupon.core.services.model.Coupon;
+import schwarz.jobs.interview.coupon.core.services.model.CouponFilter;
 import schwarz.jobs.interview.coupon.web.dto.CouponDTO;
+import schwarz.jobs.interview.coupon.web.dto.CouponFilterDTO;
 import schwarz.jobs.interview.coupon.web.dto.CreateCouponDTO;
 
 @Mapper(componentModel = "spring")
@@ -16,4 +18,6 @@ public interface CouponMapper {
     CouponEntity toCouponEntity(final Coupon coupon);
 
     CouponDTO toCouponDto(final Coupon coupon);
+
+    CouponFilter toCouponFilter(final CouponFilterDTO couponFilterDTO);
 }

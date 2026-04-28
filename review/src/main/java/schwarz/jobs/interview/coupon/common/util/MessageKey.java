@@ -9,12 +9,15 @@ public enum MessageKey {
     // Application errors
     APP_ERR_001("app.error.001"),
 
-    // Validation errors
-    COU_VAL_ERR_001("coupon.code.required"),
-    COU_VAL_ERR_002("coupon.discount.required"),
-    COU_VAL_ERR_003("coupon.discount.invalid"),
-    COU_VAL_ERR_004("coupon.minimumbasket.required"),
-    COU_VAL_ERR_005("coupon.minimumbasket.invalid");
+    // Validation errors create/update coupon
+    COU_CU_ERR_001("coupon.code.required"),
+    COU_CU_ERR_002("coupon.discount.required"),
+    COU_CU_ERR_003("coupon.discount.invalid"),
+    COU_CU_ERR_004("coupon.minimumbasket.required"),
+    COU_CU_ERR_005("coupon.minimumbasket.invalid"),
+
+    // Validation errors filter coupon
+    COU_FIL_ERR_001("coupon.filter.codes.required");
 
     private final String key;
 

@@ -8,10 +8,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,7 +21,7 @@ import schwarz.jobs.interview.coupon.core.domain.CouponEntity;
 import schwarz.jobs.interview.coupon.core.repository.CouponRepository;
 import schwarz.jobs.interview.coupon.core.services.model.Basket;
 import schwarz.jobs.interview.coupon.core.services.model.Coupon;
-import schwarz.jobs.interview.coupon.web.dto.CouponRequestDTO;
+import schwarz.jobs.interview.coupon.core.services.model.CouponFilter;
 
 @ExtendWith(SpringExtension.class)
 public class CouponServiceTest {
@@ -88,9 +88,7 @@ public class CouponServiceTest {
     @Test
     public void should_test_get_Coupons() {
 
-        CouponRequestDTO dto = CouponRequestDTO.builder()
-            .codes(Arrays.asList("1111", "1234"))
-            .build();
+        CouponFilter filter = new CouponFilter().setCodes(Set.of("1111", "1234"));
 
         final CouponEntity couponEntity01 = new CouponEntity(new Random().nextLong(), "1111", BigDecimal.TEN, BigDecimal.valueOf(50));
         final CouponEntity couponEntity02 = new CouponEntity(new Random().nextLong(), "1234", BigDecimal.TEN, BigDecimal.valueOf(50));
@@ -98,7 +96,7 @@ public class CouponServiceTest {
             .thenReturn(Optional.of(couponEntity01))
             .thenReturn(Optional.of(couponEntity02));
 
-        List<CouponEntity> returnedCoupons = couponService.getCoupons(dto);
+        List<Coupon> returnedCoupons = couponService.filterCoupons(filter);
 
         assertThat(returnedCoupons.get(0).getCode()).isEqualTo("1111");
 

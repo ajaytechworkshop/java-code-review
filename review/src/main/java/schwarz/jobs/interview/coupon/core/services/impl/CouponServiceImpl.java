@@ -1,16 +1,14 @@
 package schwarz.jobs.interview.coupon.core.services.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import schwarz.jobs.interview.coupon.common.mapper.CouponMapper;
-import schwarz.jobs.interview.coupon.core.domain.CouponEntity;
 import schwarz.jobs.interview.coupon.core.repository.CouponRepository;
 import schwarz.jobs.interview.coupon.core.services.CouponService;
 import schwarz.jobs.interview.coupon.core.services.model.Coupon;
-import schwarz.jobs.interview.coupon.web.dto.CouponRequestDTO;
+import schwarz.jobs.interview.coupon.core.services.model.CouponFilter;
 
 @RequiredArgsConstructor
 @Service
@@ -23,23 +21,21 @@ public class CouponServiceImpl implements CouponService {
     private final CouponMapper couponMapper;
 
     @Override
-    public Optional<CouponEntity> getCoupon(final String code) {
-        return couponRepository.findByCode(code);
+    public Optional<Coupon> getCoupon(final String code) {
+        return couponRepository.findByCode(code)
+            .map(couponMapper::toCoupon);
     }
 
     @Override
     public Long createCoupon(final Coupon coupon) {
-        return couponRepository.save(couponMapper.toCouponEntity(coupon))
-                               .getId();
+        return couponRepository.save(couponMapper.toCouponEntity(coupon)).getId();
     }
 
     @Override
-    public List<CouponEntity> getCoupons(final CouponRequestDTO couponRequestDTO) {
-
-        final ArrayList<CouponEntity> foundCoupons = new ArrayList<>();
-
-        couponRequestDTO.getCodes().forEach(code -> foundCoupons.add(couponRepository.findByCode(code).get()));
-
-        return foundCoupons;
+    public List<Coupon> filterCoupons(final CouponFilter couponFilter) {
+        return couponRepository.findByCodeIn(couponFilter.getCodes())
+            .stream()
+            .map(couponMapper::toCoupon)
+            .toList();
     }
 }

@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpStatus.CREATED;
 import static schwarz.jobs.interview.coupon.common.util.MessageKey.COUPON_CREATED;
 import static schwarz.jobs.interview.coupon.common.util.MessageKey.COUPON_CREATE_FAILED;
-import static schwarz.jobs.interview.coupon.common.util.MessageKey.COU_VAL_ERR_001;
-import static schwarz.jobs.interview.coupon.common.util.MessageKey.COU_VAL_ERR_002;
+import static schwarz.jobs.interview.coupon.common.util.MessageKey.COU_CU_ERR_001;
+import static schwarz.jobs.interview.coupon.common.util.MessageKey.COU_CU_ERR_002;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.client.EntityExchangeResult;
 import schwarz.jobs.interview.coupon.web.dto.ApplicationResponseDto;
 import schwarz.jobs.interview.coupon.web.dto.CreateCouponDTO;
 
-public class CouponResourceTest extends AbstractWebTest {
+public class CreateCouponTest extends AbstractWebTest {
 
     @Test
     @DisplayName("Create Coupon Successfully")
@@ -52,7 +52,7 @@ public class CouponResourceTest extends AbstractWebTest {
 
         // then
         assertThat(exchange.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertResponse(exchange.getResponseBody(), COUPON_CREATE_FAILED, List.of(error("code", COU_VAL_ERR_001)));
+        assertResponse(exchange.getResponseBody(), COUPON_CREATE_FAILED, List.of(error("code", COU_CU_ERR_001)));
     }
 
     @Test
@@ -70,6 +70,6 @@ public class CouponResourceTest extends AbstractWebTest {
 
         assertResponse(exchange.getResponseBody(),
             COUPON_CREATE_FAILED,
-            List.of(error("discount", COU_VAL_ERR_002), error("code", COU_VAL_ERR_001)));
+            List.of(error("discount", COU_CU_ERR_002), error("code", COU_CU_ERR_001)));
     }
 }

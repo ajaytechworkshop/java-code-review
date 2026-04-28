@@ -3,23 +3,11 @@ package schwarz.jobs.interview.coupon.web;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.client.RestTestClient;
 import schwarz.jobs.interview.coupon.CouponApplicationTests;
 import schwarz.jobs.interview.coupon.common.util.MessageKey;
-import schwarz.jobs.interview.coupon.common.util.Paths;
 import schwarz.jobs.interview.coupon.web.dto.ApplicationResponseDto;
-import schwarz.jobs.interview.coupon.web.dto.CreateCouponDTO;
 
 public class AbstractWebTest extends CouponApplicationTests {
-
-    protected RestTestClient.ResponseSpec createCoupon(final CreateCouponDTO createCouponDTO) {
-        return restTestClient.post()
-                             .uri(Paths.COUPON_CREATE)
-                             .body(createCouponDTO)
-                             .accept(MediaType.APPLICATION_JSON)
-                             .exchange();
-    }
 
     protected void assertResponse(final ApplicationResponseDto actual,
                                   final MessageKey expectedMessage,
