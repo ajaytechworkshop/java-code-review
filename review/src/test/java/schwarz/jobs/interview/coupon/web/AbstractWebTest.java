@@ -17,7 +17,7 @@ public class AbstractWebTest extends CouponApplicationTests {
         assertThat(actual.code()).isEqualTo(expectedMessage.name());
 
         if (!errors.isEmpty()) {
-            assertThat(actual.errors()).containsExactlyInAnyOrderElementsOf(actual.errors());
+            assertThat(actual.errors()).containsExactlyInAnyOrderElementsOf(errors);
         }
     }
 

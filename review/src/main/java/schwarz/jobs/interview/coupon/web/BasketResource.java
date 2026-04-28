@@ -7,17 +7,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import schwarz.jobs.interview.coupon.common.mapper.BasketMapper;
+import schwarz.jobs.interview.coupon.common.util.Paths;
 import schwarz.jobs.interview.coupon.core.services.BasketService;
 import schwarz.jobs.interview.coupon.core.services.model.Basket;
-import schwarz.jobs.interview.coupon.web.dto.ApplicationRequestDTO;
+import schwarz.jobs.interview.coupon.web.dto.ApplyDiscountRequestDTO;
 import schwarz.jobs.interview.coupon.web.dto.BasketDTO;
 
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api/basket")
 @RestController
 public class BasketResource {
 
@@ -26,15 +25,12 @@ public class BasketResource {
 
     private final BasketMapper basketMapper;
 
-    /**
-     * @param applicationRequestDTO
-     * @return
-     */
+
     //@ApiOperation(value = "Applies currently active promotions and coupons from the request to the requested Basket - Version 1")
-    @PostMapping(value = "/apply")
-    public ResponseEntity<BasketDTO> apply(
+    @PostMapping(value = Paths.BASKET_APPLY_COUPON)
+    public ResponseEntity<BasketDTO> applyCoupon(
         //@ApiParam(value = "Provides the necessary basket and customer information required for the coupon application", required = true)
-        @RequestBody @Valid final ApplicationRequestDTO applicationRequestDTO) {
+        @RequestBody @Valid final ApplyDiscountRequestDTO applicationRequestDTO) {
 
         log.info("Applying coupon with coupon code : {}", applicationRequestDTO.getCode());
 

@@ -16,7 +16,7 @@ public class BasketServiceImpl implements BasketService {
     @Override
     public Optional<Basket> apply(final Basket basket, final String code) {
 
-        return couponService.getCoupon(code).map(coupon -> {
+        return couponService.getCouponByCode(code).map(coupon -> {
 
             if (basket.getValue().doubleValue() >= 0) {
 

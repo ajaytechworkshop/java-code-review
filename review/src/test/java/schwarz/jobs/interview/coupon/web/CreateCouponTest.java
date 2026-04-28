@@ -6,6 +6,7 @@ import static schwarz.jobs.interview.coupon.common.util.MessageKey.APP_ERR_002;
 import static schwarz.jobs.interview.coupon.common.util.MessageKey.COUPON_CREATED;
 import static schwarz.jobs.interview.coupon.common.util.MessageKey.COU_CU_ERR_001;
 import static schwarz.jobs.interview.coupon.common.util.MessageKey.COU_CU_ERR_002;
+import static schwarz.jobs.interview.coupon.common.util.MessageKey.COU_CU_ERR_004;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -24,10 +25,10 @@ public class CreateCouponTest extends AbstractWebTest {
     void validate_create_coupon_successfully() {
         // given
         final CreateCouponDTO createCouponDTO = CreateCouponDTO.builder()
-                                                               .code("cou_code")
-                                                               .discount(BigDecimal.valueOf(50.0))
-                                                               .minBasketValue(BigDecimal.valueOf(15.0))
-                                                               .build();
+            .code("cou_code")
+            .discount(BigDecimal.valueOf(50.0))
+            .minBasketValue(BigDecimal.valueOf(15.0))
+            .build();
 
         // when
         final EntityExchangeResult<AppResponseDto> exchange = createCoupon(createCouponDTO)
@@ -43,8 +44,9 @@ public class CreateCouponTest extends AbstractWebTest {
     void validate_create_coupon_unsuccessfully_when_coupon_code_is_missing() {
         // given
         final CreateCouponDTO createCouponDTO = CreateCouponDTO.builder()
-                                                   .discount(BigDecimal.valueOf(50.0))
-                                                   .minBasketValue(BigDecimal.valueOf(15.0)).build();
+            .discount(BigDecimal.valueOf(50.0))
+            .minBasketValue(BigDecimal.valueOf(15.0))
+            .build();
 
         // when
         final EntityExchangeResult<AppResponseDto> exchange =
@@ -70,6 +72,6 @@ public class CreateCouponTest extends AbstractWebTest {
 
         assertResponse(exchange.getResponseBody(),
             APP_ERR_002,
-            List.of(error("discount", COU_CU_ERR_002), error("code", COU_CU_ERR_001)));
+            List.of(error("discount", COU_CU_ERR_002), error("minBasketValue", COU_CU_ERR_004)));
     }
 }

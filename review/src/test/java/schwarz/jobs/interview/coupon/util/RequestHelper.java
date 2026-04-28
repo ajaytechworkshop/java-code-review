@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.test.web.servlet.client.RestTestClient;
 import schwarz.jobs.interview.coupon.common.util.Paths;
 import schwarz.jobs.interview.coupon.web.dto.AppResponseDto;
+import schwarz.jobs.interview.coupon.web.dto.ApplyDiscountRequestDTO;
 import schwarz.jobs.interview.coupon.web.dto.CouponDTO;
 import schwarz.jobs.interview.coupon.web.dto.CouponFilterDTO;
 import schwarz.jobs.interview.coupon.web.dto.CreateCouponDTO;
@@ -23,14 +24,6 @@ public class RequestHelper {
         return restTestClient.post()
             .uri(Paths.COUPON_CREATE)
             .body(createCouponDTO)
-            .accept(MediaType.APPLICATION_JSON)
-            .exchange();
-    }
-
-    private RestTestClient.ResponseSpec filterCoupons(final CouponFilterDTO couponFilterDTO) {
-        return restTestClient.post()
-            .uri(Paths.COUPON_FILTER)
-            .body(couponFilterDTO)
             .accept(MediaType.APPLICATION_JSON)
             .exchange();
     }
@@ -55,5 +48,21 @@ public class RequestHelper {
             .expectStatus().isEqualTo(400)
             .returnResult(AppResponseDto.class)
             .getResponseBody();
+    }
+
+    public RestTestClient.ResponseSpec applyCouponToBasket(final ApplyDiscountRequestDTO applyDiscountRequestDTO) {
+        return restTestClient.post()
+            .uri(Paths.BASKET_APPLY_COUPON)
+            .body(applyDiscountRequestDTO)
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange();
+    }
+
+    private RestTestClient.ResponseSpec filterCoupons(final CouponFilterDTO couponFilterDTO) {
+        return restTestClient.post()
+            .uri(Paths.COUPON_FILTER)
+            .body(couponFilterDTO)
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange();
     }
 }
