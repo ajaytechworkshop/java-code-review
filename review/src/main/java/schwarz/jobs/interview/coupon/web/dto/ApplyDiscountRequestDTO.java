@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import schwarz.jobs.interview.coupon.common.validator.ValidCouponCode;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,6 +15,7 @@ import lombok.NoArgsConstructor;
 public class ApplyDiscountRequestDTO {
 
     @NotBlank(message = "{coupon.code.required}")
+    @ValidCouponCode(message = "{coupon.code.invalid}")
     private String code;
 
     @NotNull(message = "{basket.required}")

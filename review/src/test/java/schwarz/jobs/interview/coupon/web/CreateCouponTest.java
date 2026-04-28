@@ -4,9 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpStatus.CREATED;
 import static schwarz.jobs.interview.coupon.common.util.MessageKey.APP_ERR_002;
 import static schwarz.jobs.interview.coupon.common.util.MessageKey.COUPON_CREATED;
-import static schwarz.jobs.interview.coupon.common.util.MessageKey.COU_CU_ERR_001;
-import static schwarz.jobs.interview.coupon.common.util.MessageKey.COU_CU_ERR_002;
-import static schwarz.jobs.interview.coupon.common.util.MessageKey.COU_CU_ERR_004;
+import static schwarz.jobs.interview.coupon.common.util.MessageKey.COU_VAL_ERR_001;
+import static schwarz.jobs.interview.coupon.common.util.MessageKey.COU_VAL_ERR_002;
+import static schwarz.jobs.interview.coupon.common.util.MessageKey.COU_VAL_ERR_004;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -54,7 +54,7 @@ public class CreateCouponTest extends AbstractWebTest {
 
         // then
         assertThat(exchange.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertResponse(exchange.getResponseBody(), APP_ERR_002, List.of(error("code", COU_CU_ERR_001)));
+        assertResponse(exchange.getResponseBody(), APP_ERR_002, List.of(error("code", COU_VAL_ERR_001)));
     }
 
     @Test
@@ -72,6 +72,6 @@ public class CreateCouponTest extends AbstractWebTest {
 
         assertResponse(exchange.getResponseBody(),
             APP_ERR_002,
-            List.of(error("discount", COU_CU_ERR_002), error("minBasketValue", COU_CU_ERR_004)));
+            List.of(error("discount", COU_VAL_ERR_002), error("minBasketValue", COU_VAL_ERR_004)));
     }
 }

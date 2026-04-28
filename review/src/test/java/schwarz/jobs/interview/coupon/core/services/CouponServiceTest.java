@@ -76,8 +76,8 @@ public class CouponServiceTest {
         when(couponRepository.findByCode("1111")).thenReturn(Optional.of(couponEntity));
 
         // when
-        final Optional<Basket> applyCouponFirstBasket = basketService.apply(firstBasket, "1111");
-        final Optional<Basket> applyCouponSecondBasket = basketService.apply(secondBasket, "1111");
+        final Optional<Basket> applyCouponFirstBasket = basketService.applyCoupon(firstBasket, "1111");
+        final Optional<Basket> applyCouponSecondBasket = basketService.applyCoupon(secondBasket, "1111");
 
         // then
         assertThat(applyCouponFirstBasket).hasValueSatisfying(b -> {
@@ -91,7 +91,7 @@ public class CouponServiceTest {
         });
 
         assertThatThrownBy(() -> {
-            basketService.apply(thirdBasket, "1111");
+            basketService.applyCoupon(thirdBasket, "1111");
         }).isInstanceOf(RuntimeException.class)
             .hasMessage("Can't apply negative discounts");
     }
