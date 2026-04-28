@@ -2,8 +2,8 @@ package schwarz.jobs.interview.coupon.web;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpStatus.CREATED;
+import static schwarz.jobs.interview.coupon.common.util.MessageKey.APP_ERR_002;
 import static schwarz.jobs.interview.coupon.common.util.MessageKey.COUPON_CREATED;
-import static schwarz.jobs.interview.coupon.common.util.MessageKey.COUPON_CREATE_FAILED;
 import static schwarz.jobs.interview.coupon.common.util.MessageKey.COU_CU_ERR_001;
 import static schwarz.jobs.interview.coupon.common.util.MessageKey.COU_CU_ERR_002;
 
@@ -25,8 +25,8 @@ public class CreateCouponTest extends AbstractWebTest {
         // given
         final CreateCouponDTO createCouponDTO = CreateCouponDTO.builder()
                                                                .code("cou_code")
-                                                               .discount(new BigDecimal(50.0))
-                                                               .minBasketValue(new BigDecimal("15.0"))
+                                                               .discount(BigDecimal.valueOf(50.0))
+                                                               .minBasketValue(BigDecimal.valueOf(15.0))
                                                                .build();
 
         // when
@@ -43,8 +43,8 @@ public class CreateCouponTest extends AbstractWebTest {
     void validate_create_coupon_unsuccessfully_when_coupon_code_is_missing() {
         // given
         final CreateCouponDTO createCouponDTO = CreateCouponDTO.builder()
-                                                   .discount(new BigDecimal(50.0))
-                                                   .minBasketValue(new BigDecimal("15.0")).build();
+                                                   .discount(BigDecimal.valueOf(50.0))
+                                                   .minBasketValue(BigDecimal.valueOf(15.0)).build();
 
         // when
         final EntityExchangeResult<ApplicationResponseDto> exchange =
@@ -52,7 +52,7 @@ public class CreateCouponTest extends AbstractWebTest {
 
         // then
         assertThat(exchange.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertResponse(exchange.getResponseBody(), COUPON_CREATE_FAILED, List.of(error("code", COU_CU_ERR_001)));
+        assertResponse(exchange.getResponseBody(), APP_ERR_002, List.of(error("code", COU_CU_ERR_001)));
     }
 
     @Test
@@ -69,7 +69,7 @@ public class CreateCouponTest extends AbstractWebTest {
         assertThat(exchange.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
 
         assertResponse(exchange.getResponseBody(),
-            COUPON_CREATE_FAILED,
+            APP_ERR_002,
             List.of(error("discount", COU_CU_ERR_002), error("code", COU_CU_ERR_001)));
     }
 }

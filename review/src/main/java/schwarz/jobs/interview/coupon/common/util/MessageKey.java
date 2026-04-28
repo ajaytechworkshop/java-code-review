@@ -8,6 +8,7 @@ public enum MessageKey {
 
     // Application errors
     APP_ERR_001("app.error.001"),
+    APP_ERR_002("app.err.002"),
 
     // Validation errors create/update coupon
     COU_CU_ERR_001("coupon.code.required"),

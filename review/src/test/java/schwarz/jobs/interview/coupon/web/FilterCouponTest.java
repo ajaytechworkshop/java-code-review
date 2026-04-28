@@ -10,8 +10,8 @@ import java.util.Set;
 import org.json.JSONException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import schwarz.jobs.interview.coupon.common.util.MessageKey;
 import schwarz.jobs.interview.coupon.core.services.model.Coupon;
-import schwarz.jobs.interview.coupon.web.dto.ApplicationResponseDto;
 
 public class FilterCouponTest extends AbstractWebTest {
 
@@ -57,10 +57,12 @@ public class FilterCouponTest extends AbstractWebTest {
     @Test
     @DisplayName("Filter coupons unsuccessfully for empty couppon codes")
     void validate_filter_coupons_unsuccessfully_for_empty_coupon_codes() {
-        // when
-        final ApplicationResponseDto responseDto = filterCouponsUnsuccessfully(Set.of());
+        assertResponse(filterCouponsUnsuccessfully(Set.of()),
+            MessageKey.APP_ERR_002,
+            List.of(error("couponCodes", MessageKey.COU_FIL_ERR_001)));
 
-        // then
-
+        assertResponse(filterCouponsUnsuccessfully(null),
+            MessageKey.APP_ERR_002,
+            List.of(error("couponCodes", MessageKey.COU_FIL_ERR_001)));
     }
 }

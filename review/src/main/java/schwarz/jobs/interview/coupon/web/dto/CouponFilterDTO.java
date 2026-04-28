@@ -1,6 +1,6 @@
 package schwarz.jobs.interview.coupon.web.dto;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CouponFilterDTO {
 
-    @NotNull(message = "{coupon.filter.codes.required}")
+    @NotEmpty(message = "{coupon.filter.codes.required}")
     private Set<String> codes;
 }

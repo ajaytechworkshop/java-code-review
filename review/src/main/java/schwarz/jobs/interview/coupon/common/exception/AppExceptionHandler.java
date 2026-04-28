@@ -3,7 +3,7 @@ package schwarz.jobs.interview.coupon.common.exception;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static schwarz.jobs.interview.coupon.common.util.MessageKey.APP_ERR_001;
-import static schwarz.jobs.interview.coupon.common.util.MessageKey.COUPON_CREATE_FAILED;
+import static schwarz.jobs.interview.coupon.common.util.MessageKey.APP_ERR_002;
 
 import java.util.Collections;
 import java.util.List;
@@ -36,7 +36,7 @@ public class AppExceptionHandler {
         log.info("Validation Failed, Violations :{}", validationErrors);
 
         return ResponseEntity.status(BAD_REQUEST)
-                             .body(responseDTOMapper.mapError(COUPON_CREATE_FAILED, validationErrors));
+                             .body(responseDTOMapper.mapError(APP_ERR_002, validationErrors));
     }
 
     @ExceptionHandler(Exception.class)
