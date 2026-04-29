@@ -55,14 +55,14 @@ public class FilterCouponTest extends AbstractWebTest {
     }
 
     @Test
-    @DisplayName("Filter coupons unsuccessfully for empty couppon codes")
+//    @DisplayName("Filter coupons unsuccessfully for empty couppon codes")
     void validate_filter_coupons_unsuccessfully_for_empty_coupon_codes() {
         assertResponse(filterCouponsUnsuccessfully(Set.of()),
             MessageKey.APP_ERR_002,
-            List.of(error("couponCodes", MessageKey.COU_FIL_ERR_001)));
+            List.of(error("codes", MessageKey.COU_FIL_ERR_001)));
 
         assertResponse(filterCouponsUnsuccessfully(null),
             MessageKey.APP_ERR_002,
-            List.of(error("couponCodes", MessageKey.COU_FIL_ERR_001)));
+            List.of(error("codes", MessageKey.COU_FIL_ERR_001)));
     }
 }
