@@ -1,5 +1,6 @@
 package schwarz.jobs.interview.coupon.web.dto;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -19,5 +20,6 @@ public class ApplyDiscountRequestDTO {
     private String code;
 
     @NotNull(message = "{basket.required}")
+    @Valid
     private BasketDTO basket;
 }

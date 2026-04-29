@@ -4,6 +4,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static schwarz.jobs.interview.coupon.common.util.MessageKey.APP_ERR_001;
 import static schwarz.jobs.interview.coupon.common.util.MessageKey.APP_ERR_002;
+import static schwarz.jobs.interview.coupon.common.util.MessageKey.BAS_COUAPP_FAILED;
 
 import java.util.Collections;
 import java.util.List;
@@ -39,11 +40,15 @@ public class AppExceptionHandler {
             .body(responseDTOMapper.mapError(APP_ERR_002, validationErrors));
     }
 
+    @ExceptionHandler(CouponApplicationException.class)
+    public ResponseEntity<AppResponseDto<Void>> handleCouponApplicationException(final CouponApplicationException ex) {
+        log.error(ex.getMessage(), ex);
+        return ResponseEntity.status(BAD_REQUEST).body(responseDTOMapper.mapResponse(BAS_COUAPP_FAILED, ex.getCouponCode()));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<AppResponseDto<Void>> handleException(final Exception ex) {
         log.error("Exception While processing request", ex);
-        return ResponseEntity.status(INTERNAL_SERVER_ERROR)
-            .body(responseDTOMapper.mapError(APP_ERR_001, Collections.emptyList()));
+        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(responseDTOMapper.mapError(APP_ERR_001, Collections.emptyList()));
     }
-
 }

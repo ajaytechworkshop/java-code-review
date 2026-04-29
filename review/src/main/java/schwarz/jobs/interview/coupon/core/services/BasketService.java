@@ -6,5 +6,5 @@ import schwarz.jobs.interview.coupon.core.services.model.Basket;
 public interface BasketService {
 
     // Apply coupon to basket
-    Optional<Basket> apply(final Basket basket, final String code);
+    Optional<Basket> applyCoupon(final Basket basket, final String code);
 }

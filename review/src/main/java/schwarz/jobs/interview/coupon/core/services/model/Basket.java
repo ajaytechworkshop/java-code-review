@@ -14,7 +14,7 @@ public class Basket {
 
     public void applyDiscount(final BigDecimal discount) {
         this.appliedDiscount = discount;
+        this.value = this.value.subtract(discount);
         this.applicationSuccessful = true;
     }
-
 }

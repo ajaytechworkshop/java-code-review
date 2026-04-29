@@ -20,6 +20,9 @@ public class CouponCodeValidator implements ConstraintValidator<ValidCouponCode,
 
     @Override
     public boolean isValid(String couponCode, ConstraintValidatorContext context) {
+        if (couponCode == null) {
+            return true;
+        }
         return couponService.getCouponByCode(couponCode).isPresent();
     }
 }

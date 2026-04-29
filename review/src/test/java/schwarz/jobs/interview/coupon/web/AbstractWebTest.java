@@ -2,12 +2,23 @@ package schwarz.jobs.interview.coupon.web;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 import schwarz.jobs.interview.coupon.CouponApplicationTests;
 import schwarz.jobs.interview.coupon.common.util.MessageKey;
+import schwarz.jobs.interview.coupon.core.services.model.Coupon;
 import schwarz.jobs.interview.coupon.web.dto.AppResponseDto;
 
 public class AbstractWebTest extends CouponApplicationTests {
+
+    protected Coupon coupon() {
+        return Coupon.builder()
+            .code(UUID.randomUUID().toString())
+            .discount(BigDecimal.valueOf(Math.random()))
+            .minBasketValue(BigDecimal.valueOf(Math.random()))
+            .build();
+    }
 
     protected void assertResponse(final AppResponseDto actual,
                                   final MessageKey expectedMessage,

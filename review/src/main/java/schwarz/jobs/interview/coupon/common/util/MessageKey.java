@@ -5,6 +5,7 @@ public enum MessageKey {
     // Info
     COUPON_CREATED("coupon.create.success"),
     COUPON_CREATE_FAILED("coupon.create.failed"),
+    BAS_COUAPP_FAILED("basket.coupon.application.failed"),
 
     // Application errors
     APP_ERR_001("app.error.001"),
@@ -23,7 +24,8 @@ public enum MessageKey {
 
     // Validation errors, Basket
     BAS_VAL_ERR_001("basket.required"),
-    BAS_VAL_ERR_002("basket.value.invalid");
+    BAS_VAL_ERR_002("basket.value.invalid"),
+    BAS_VAL_ERR_003("basket.value.required");
 
     private final String key;
 

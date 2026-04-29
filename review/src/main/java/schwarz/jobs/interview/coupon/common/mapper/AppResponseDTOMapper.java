@@ -25,5 +25,9 @@ public abstract class AppResponseDTOMapper {
     @Mapping(target = "data", ignore = true)
     public abstract AppResponseDto<Void> mapError(final MessageKey messageKey, final List<AppResponseDto.Error> errors);
 
+    @Mapping(target = "message", expression = "java(messageService.message(messageKey.key(),args))")
+    @Mapping(target = "code", expression = "java(messageKey.name())")
+    public abstract AppResponseDto<Void> mapResponse(final MessageKey messageKey, final Object... args);
+
     public abstract AppResponseDto.Error mapViolation(final String field, final String message);
 }

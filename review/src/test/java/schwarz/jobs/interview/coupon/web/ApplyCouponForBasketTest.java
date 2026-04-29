@@ -16,12 +16,7 @@ public class ApplyCouponForBasketTest extends AbstractWebTest {
     @DisplayName("Validate apply discount unsuccessfully when basket is null")
     void validate_apply_discount_unsuccessfully_when_basket_is_null() {
         // given
-        final Coupon coupon = Coupon.builder()
-            .code("code01")
-            .discount(BigDecimal.valueOf(10))
-            .minBasketValue(BigDecimal.valueOf(50))
-            .build();
-
+        final Coupon coupon = coupon();
         couponService.createCoupon(coupon);
 
         final ApplyDiscountRequestDTO applyDiscountRequestDTO = ApplyDiscountRequestDTO.builder()
@@ -59,10 +54,7 @@ public class ApplyCouponForBasketTest extends AbstractWebTest {
     @DisplayName("Validate apply discount unsuccessfully when coupon code is invalid")
     void validate_apply_discount_unsuccessfully_when_coupon_code_is_invalid() {
         // given
-        final BasketDTO basketDTO = BasketDTO.builder()
-            .value(BigDecimal.valueOf(10.0))
-            .appliedDiscount(BigDecimal.valueOf(5.0))
-            .build();
+        final BasketDTO basketDTO = basketDTO(BigDecimal.valueOf(10));
 
         final ApplyDiscountRequestDTO applyDiscountRequestDTO = ApplyDiscountRequestDTO.builder()
             .code("invalid-coupon")
@@ -76,5 +68,58 @@ public class ApplyCouponForBasketTest extends AbstractWebTest {
 
         // then
         assertResponse(responseDto, MessageKey.APP_ERR_002, List.of(error("code", MessageKey.COU_VAL_ERR_006)));
+    }
+
+    @Test
+    @DisplayName("Validate apply discount unsuccessfully when basket value is zero")
+    void validate_apply_discount_unsuccessfully_when_basket_value_is_zero() {
+        // given
+        final BasketDTO basketDTO = basketDTO(BigDecimal.ZERO);
+
+        final Coupon coupon = coupon();
+        couponService.createCoupon(coupon);
+
+        final ApplyDiscountRequestDTO applyDiscountRequestDTO = ApplyDiscountRequestDTO.builder()
+            .code(coupon.getCode())
+            .basket(basketDTO)
+            .build();
+
+        // when
+        final AppResponseDto responseDto = applyCouponToBasket(applyDiscountRequestDTO)
+            .returnResult(AppResponseDto.class)
+            .getResponseBody();
+
+        // then
+        assertResponse(responseDto, MessageKey.APP_ERR_002, List.of(error("basket.value", MessageKey.BAS_VAL_ERR_002)));
+    }
+
+    @Test
+    @DisplayName("Validate apply discount unsuccessfully when basket value is zero")
+    void validate_apply_discount_unsuccessfully_when_basket_value_is_negative() {
+        // given
+        final BasketDTO basketDTO = basketDTO(BigDecimal.valueOf(-150.0));
+
+        final Coupon coupon = coupon();
+        couponService.createCoupon(coupon);
+
+        final ApplyDiscountRequestDTO applyDiscountRequestDTO = ApplyDiscountRequestDTO.builder()
+            .code(coupon.getCode())
+            .basket(basketDTO)
+            .build();
+
+        // when
+        final AppResponseDto responseDto = applyCouponToBasket(applyDiscountRequestDTO)
+            .returnResult(AppResponseDto.class)
+            .getResponseBody();
+
+        // then
+        assertResponse(responseDto, MessageKey.APP_ERR_002, List.of(error("basket.value", MessageKey.BAS_VAL_ERR_002)));
+    }
+
+    private BasketDTO basketDTO(final BigDecimal value) {
+        return BasketDTO.builder()
+            .value(value)
+            .appliedDiscount(BigDecimal.valueOf(5.0))
+            .build();
     }
 }
