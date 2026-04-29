@@ -12,7 +12,7 @@ public class CouponApplicationException extends RuntimeException {
         this.couponCode = couponCode;
     }
 
-    public static CouponApplicationException complain(final String couponCode) {
-        return new CouponApplicationException(String.format("Coupon application failed for coupon code : %s", couponCode), couponCode);
+    public static CouponApplicationException complain(final String message, final String couponCode) {
+        return new CouponApplicationException(message, couponCode);
     }
 }
