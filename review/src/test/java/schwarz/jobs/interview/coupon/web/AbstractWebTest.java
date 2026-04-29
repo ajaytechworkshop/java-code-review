@@ -9,6 +9,8 @@ import schwarz.jobs.interview.coupon.CouponApplicationTests;
 import schwarz.jobs.interview.coupon.common.util.MessageKey;
 import schwarz.jobs.interview.coupon.core.services.model.Coupon;
 import schwarz.jobs.interview.coupon.web.dto.AppResponseDto;
+import schwarz.jobs.interview.coupon.web.dto.ApplyDiscountRequestDTO;
+import schwarz.jobs.interview.coupon.web.dto.BasketDTO;
 
 public class AbstractWebTest extends CouponApplicationTests {
 
@@ -17,6 +19,21 @@ public class AbstractWebTest extends CouponApplicationTests {
             .code(UUID.randomUUID().toString())
             .discount(BigDecimal.valueOf(Math.random()))
             .minBasketValue(BigDecimal.valueOf(Math.random()))
+            .build();
+    }
+
+    protected Coupon coupon(final BigDecimal minBasketValue) {
+        return Coupon.builder()
+            .code(UUID.randomUUID().toString())
+            .discount(BigDecimal.valueOf(Math.random()))
+            .minBasketValue(minBasketValue)
+            .build();
+    }
+
+    protected ApplyDiscountRequestDTO applyDiscountRequestDTO(final Coupon coupon, final BasketDTO basketDTO) {
+        return ApplyDiscountRequestDTO.builder()
+            .code(coupon.getCode())
+            .basket(basketDTO)
             .build();
     }
 

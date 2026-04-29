@@ -27,6 +27,12 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
+    public Optional<Coupon> getCouponById(Long id) {
+        return couponRepository.findById(id)
+            .map(couponMapper::toCoupon);
+    }
+
+    @Override
     public Long createCoupon(final Coupon coupon) {
         return couponRepository.save(couponMapper.toCouponEntity(coupon)).getId();
     }

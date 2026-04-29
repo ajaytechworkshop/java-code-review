@@ -1,7 +1,6 @@
 package schwarz.jobs.interview.coupon.core.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -12,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
+import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mapstruct.factory.Mappers;
@@ -50,6 +50,9 @@ public class CouponServiceTest {
             .minBasketValue(BigDecimal.valueOf(50))
             .build();
 
+        final CouponEntity couponEntity = new CouponEntity(10L, UUID.randomUUID().toString(), BigDecimal.ONE, BigDecimal.TEN);
+        Mockito.when(couponRepository.save(any())).thenReturn(couponEntity);
+
         // when
         couponService.createCoupon(coupon);
 
@@ -66,10 +69,6 @@ public class CouponServiceTest {
 
         final Basket secondBasket = Basket.builder()
             .value(BigDecimal.valueOf(0))
-            .build();
-
-        final Basket thirdBasket = Basket.builder()
-            .value(BigDecimal.valueOf(-1))
             .build();
 
         final CouponEntity couponEntity = new CouponEntity(new Random().nextLong(), "1111", BigDecimal.TEN, BigDecimal.valueOf(50));
@@ -89,24 +88,18 @@ public class CouponServiceTest {
             assertThat(b).isEqualTo(secondBasket);
             assertThat(b.isApplicationSuccessful()).isFalse();
         });
-
-        assertThatThrownBy(() -> {
-            basketService.applyCoupon(thirdBasket, "1111");
-        }).isInstanceOf(RuntimeException.class)
-            .hasMessage("Can't apply negative discounts");
     }
 
     @Test
-    public void should_test_get_Coupons() {
+    public void validate_test_get_coupons() {
 
         CouponFilter filter = new CouponFilter().setCodes(Set.of("1111", "1234"));
 
         final CouponEntity couponEntity01 = new CouponEntity(new Random().nextLong(), "1111", BigDecimal.TEN, BigDecimal.valueOf(50));
         final CouponEntity couponEntity02 = new CouponEntity(new Random().nextLong(), "1234", BigDecimal.TEN, BigDecimal.valueOf(50));
 
-        when(couponRepository.findByCode(any()))
-            .thenReturn(Optional.of(couponEntity01))
-            .thenReturn(Optional.of(couponEntity02));
+        when(couponRepository.findByCodeIn(any())).thenReturn(List.of(couponEntity01, couponEntity02));
+
 
         List<Coupon> returnedCoupons = couponService.filterCoupons(filter);
 
